@@ -9,3 +9,5 @@ convex/util/xxhash.ts
 data/*.js
 src/editor/*
 dist/*
+.runtime/*
+.convex/*

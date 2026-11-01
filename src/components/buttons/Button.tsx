@@ -11,6 +11,8 @@ export default function Button(props: {
 }) {
   return (
     <a
+      role={props.href ? undefined : 'button'}
+      tabIndex={0}
       className={clsx(
         'button text-white shadow-solid text-xl pointer-events-auto',
         props.className,
@@ -18,11 +20,17 @@ export default function Button(props: {
       href={props.href}
       title={props.title}
       onClick={props.onClick}
+      onKeyDown={(event) => {
+        if (!props.href && (event.key === 'Enter' || event.key === ' ')) {
+          event.preventDefault();
+          event.currentTarget.click();
+        }
+      }}
     >
       <div className="inline-block bg-clay-700">
         <span>
           <div className="inline-flex h-full items-center gap-4">
-            <img className="w-4 h-4 sm:w-[30px] sm:h-[30px]" src={props.imgUrl} />
+            <img className="w-4 h-4 sm:w-[30px] sm:h-[30px]" src={props.imgUrl} alt="" />
             {props.children}
           </div>
         </span>

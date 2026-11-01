@@ -6,6 +6,7 @@ import { TableNames } from './_generated/dataModel';
 import { v } from 'convex/values';
 
 const crons = cronJobs();
+crons.interval('recover civilization loops', { seconds: 30 }, internal.civilization.recover);
 
 crons.interval(
   'stop inactive worlds',
@@ -16,6 +17,11 @@ crons.interval(
 crons.interval('restart dead worlds', { seconds: 60 }, internal.world.restartDeadWorlds);
 
 crons.daily('vacuum old entries', { hourUTC: 4, minuteUTC: 20 }, internal.crons.vacuumOldEntries);
+crons.daily(
+  'compress old civilization history',
+  { hourUTC: 3, minuteUTC: 20 },
+  internal.civilization.archiveOldHistory,
+);
 
 export default crons;
 

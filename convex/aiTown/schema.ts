@@ -21,6 +21,7 @@ export const aiTownTables = {
     isDefault: v.boolean(),
     engineId: v.id('engines'),
     lastViewed: v.number(),
+    language: v.optional(v.union(v.literal('zh'), v.literal('en'))),
     status: v.union(v.literal('running'), v.literal('stoppedByDeveloper'), v.literal('inactive')),
   }).index('worldId', ['worldId']),
 

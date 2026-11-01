@@ -1,0 +1,6 @@
+{
+  "databaseWarnBytes": 4294967296,
+  "freeWarnBytes": 10737418240,
+  "keepLast": 2,
+  "keepDays": 7
+}

@@ -22,6 +22,19 @@ export const defaultWorldStatus = query({
   },
 });
 
+export const setLanguage = mutation({
+  args: { worldId: v.id('worlds'), language: v.union(v.literal('zh'), v.literal('en')) },
+  handler: async (ctx, args) => {
+    const status = await ctx.db
+      .query('worldStatus')
+      .withIndex('worldId', (q) => q.eq('worldId', args.worldId))
+      .unique();
+    if (!status) throw new Error('World not found');
+    if (status.language !== args.language)
+      await ctx.db.patch(status._id, { language: args.language });
+  },
+});
+
 export const heartbeatWorld = mutation({
   args: {
     worldId: v.id('worlds'),

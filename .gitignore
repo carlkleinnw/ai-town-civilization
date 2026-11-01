@@ -42,3 +42,16 @@ dist
 
 convex-local*
 convex_local*
+.convex/
+.runtime/
+
+# Local recovery inventories and private machine state
+/storage-protected-backups.json
+/storage-verified-restores.json
+/.impeccable/
+*.key
+*.p12
+*.pfx
+.env.*
+!.env.defaults
+!.env.example

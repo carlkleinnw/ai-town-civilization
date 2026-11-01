@@ -6,6 +6,8 @@ import { MessageInput } from './MessageInput';
 import { Player } from '../../convex/aiTown/player';
 import { Conversation } from '../../convex/aiTown/conversation';
 import { useEffect, useRef } from 'react';
+import { useLocale } from '../i18n/LocaleProvider';
+import { localizeName } from '../i18n/catalog';
 
 export function Messages({
   worldId,
@@ -24,6 +26,9 @@ export function Messages({
   humanPlayer?: Player;
   scrollViewRef: React.RefObject<HTMLDivElement>;
 }) {
+  const { locale, t } = useLocale();
+  const formatDate = (time: number) =>
+    new Date(time).toLocaleString(locale === 'zh' ? 'zh-CN' : 'en-US');
   const humanPlayerId = humanPlayer?.id;
   const descriptions = useQuery(api.world.gameDescriptions, { worldId });
   const messages = useQuery(api.messages.listMessages, {
@@ -72,9 +77,9 @@ export function Messages({
     const node = (
       <div key={`text-${m._id}`} className="leading-tight mb-6">
         <div className="flex gap-4">
-          <span className="uppercase flex-grow">{m.authorName}</span>
-          <time dateTime={m._creationTime.toString()}>
-            {new Date(m._creationTime).toLocaleString()}
+          <span className="uppercase flex-grow">{localizeName(locale, m.authorName)}</span>
+          <time dateTime={new Date(m._creationTime).toISOString()}>
+            {formatDate(m._creationTime)}
           </time>
         </div>
         <div className={clsx('bubble', m.author === humanPlayerId && 'bubble-mine')}>
@@ -89,8 +94,9 @@ export function Messages({
   const membershipNodes: typeof messageNodes = [];
   if (conversation.kind === 'active') {
     for (const [playerId, m] of conversation.doc.participants) {
-      const playerName = descriptions?.playerDescriptions.find((p) => p.playerId === playerId)
-        ?.name;
+      const playerName = descriptions?.playerDescriptions.find(
+        (p) => p.playerId === playerId,
+      )?.name;
       let started;
       if (m.status.kind === 'participating') {
         started = m.status.started;
@@ -99,7 +105,9 @@ export function Messages({
         membershipNodes.push({
           node: (
             <div key={`joined-${playerId}`} className="leading-tight mb-6">
-              <p className="text-brown-700 text-center">{playerName} joined the conversation.</p>
+              <p className="text-brown-700 text-center">
+                {t('joined', { name: localizeName(locale, playerName) })}
+              </p>
             </div>
           ),
           time: started,
@@ -108,13 +116,16 @@ export function Messages({
     }
   } else {
     for (const playerId of conversation.doc.participants) {
-      const playerName = descriptions?.playerDescriptions.find((p) => p.playerId === playerId)
-        ?.name;
+      const playerName = descriptions?.playerDescriptions.find(
+        (p) => p.playerId === playerId,
+      )?.name;
       const started = conversation.doc.created;
       membershipNodes.push({
         node: (
           <div key={`joined-${playerId}`} className="leading-tight mb-6">
-            <p className="text-brown-700 text-center">{playerName} joined the conversation.</p>
+            <p className="text-brown-700 text-center">
+              {t('joined', { name: localizeName(locale, playerName) })}
+            </p>
           </div>
         ),
         time: started,
@@ -123,7 +134,9 @@ export function Messages({
       membershipNodes.push({
         node: (
           <div key={`left-${playerId}`} className="leading-tight mb-6">
-            <p className="text-brown-700 text-center">{playerName} left the conversation.</p>
+            <p className="text-brown-700 text-center">
+              {t('left', { name: localizeName(locale, playerName) })}
+            </p>
           </div>
         ),
         // Always sort all "left" messages after the last message.
@@ -141,14 +154,16 @@ export function Messages({
         {currentlyTyping && currentlyTyping.playerId !== humanPlayerId && (
           <div key="typing" className="leading-tight mb-6">
             <div className="flex gap-4">
-              <span className="uppercase flex-grow">{currentlyTypingName}</span>
-              <time dateTime={currentlyTyping.since.toString()}>
-                {new Date(currentlyTyping.since).toLocaleString()}
+              <span className="uppercase flex-grow">
+                {localizeName(locale, currentlyTypingName)}
+              </span>
+              <time dateTime={new Date(currentlyTyping.since).toISOString()}>
+                {formatDate(currentlyTyping.since)}
               </time>
             </div>
             <div className={clsx('bubble')}>
               <p className="bg-white -mx-3 -my-1">
-                <i>typing...</i>
+                <i>{t('typing')}</i>
               </p>
             </div>
           </div>

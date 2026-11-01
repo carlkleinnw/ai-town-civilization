@@ -1,0 +1,1341 @@
+.civ-app {
+  --civ-ground: #251f29;
+  --civ-panel: #342832;
+  --civ-inset: #29222b;
+  --civ-line: #68504f;
+  --civ-text: #f0e4d0;
+  --civ-muted: #c6b4a6;
+  --civ-gold: #f2cd83;
+  --civ-green: #9bceb6;
+  min-height: 100vh;
+  padding: 0 28px;
+  background: var(--civ-ground);
+  color: var(--civ-text);
+  font:
+    14px/1.65 'Microsoft YaHei UI',
+    'Microsoft YaHei',
+    system-ui,
+    sans-serif;
+  font-variant-numeric: tabular-nums;
+  color-scheme: dark;
+  accent-color: var(--civ-gold);
+}
+.civ-app .civ-nav-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 14px;
+  text-decoration: none;
+  min-height: 40px;
+}
+.civ-app.civ-world-page {
+  position: relative;
+  padding: 0;
+  width: 100%;
+  height: 100dvh;
+  min-height: 400px;
+  overflow: hidden;
+}
+.civ-world-page .civ-map-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  touch-action: none;
+}
+.civ-world-page .civ-map-canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  image-rendering: pixelated;
+}
+.civ-execution-receipt {
+  padding: 8px 0;
+  border-block: 1px solid var(--civ-line);
+}
+.civ-world-page {
+  scrollbar-color: var(--civ-line) var(--civ-panel);
+}
+.civ-world-page ::selection {
+  background: var(--civ-gold);
+  color: var(--civ-ground);
+}
+.civ-world-hud {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: var(--civ-panel);
+  border: 2px solid var(--civ-line);
+}
+.civ-world-title {
+  flex: 1;
+  min-width: 0;
+}
+.civ-app .civ-world-hud .civ-world-title h1 {
+  font:
+    700 19px/1.5 'Microsoft YaHei',
+    system-ui,
+    sans-serif;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.civ-world-title > span {
+  font-size: 12px;
+  color: var(--civ-muted);
+}
+.civ-world-hud .civ-time-controls {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.civ-world-inspector {
+  position: absolute;
+  z-index: 4;
+  right: 16px;
+  top: 115px;
+  width: 340px;
+  max-height: calc(100dvh - 190px);
+  overflow-y: auto;
+  background: var(--civ-panel);
+  border: 2px solid var(--civ-line);
+}
+.civ-world-inspector .civ-inspector {
+  border: 0;
+  max-height: none;
+  padding: 18px;
+}
+.civ-world-inspector .civ-follow {
+  margin: 12px 18px 0;
+}
+.civ-world-caption {
+  position: absolute;
+  z-index: 2;
+  left: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  background: var(--civ-panel);
+  border: 1px solid var(--civ-line);
+  padding: 8px 12px;
+  font-size: 12px;
+}
+.civ-world-caption a {
+  color: var(--civ-gold);
+}
+.civ-locator {
+  position: absolute;
+  z-index: 2;
+  bottom: 70px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 5px 8px;
+  background: var(--civ-panel);
+}
+.civ-locator select {
+  max-width: 230px;
+}
+.civ-map-tools {
+  position: absolute;
+  z-index: 2;
+  bottom: 70px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.civ-map-tools span {
+  padding: 5px 9px;
+  background: var(--civ-panel);
+  color: var(--civ-muted);
+  font-size: 12px;
+}
+.civ-app .civ-map-tools button {
+  min-width: 40px;
+}
+.civ-world-feedback {
+  position: absolute;
+  left: 16px;
+  top: 110px;
+  background: var(--civ-panel);
+  padding: 10px;
+  max-width: 60%;
+  z-index: 4;
+}
+.civ-world-pending {
+  position: absolute;
+  bottom: 120px;
+  left: 16px;
+  background: var(--civ-panel);
+  color: var(--civ-gold);
+  padding: 10px;
+  z-index: 3;
+}
+.civ-workbench-detail.civ-observatory {
+  display: block;
+}
+.civ-workbench-detail .civ-inspector {
+  max-height: 450px;
+}
+.civ-clock-settings {
+  margin-top: 30px;
+  border-top: 1px solid var(--civ-line);
+  padding-top: 20px;
+  max-width: 800px;
+}
+@media (max-width: 800px) {
+  .civ-world-hud {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    padding: 10px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .civ-world-title {
+    flex-basis: calc(100% - 92px);
+    order: -2;
+  }
+  .civ-world-hud .civ-language-toggle {
+    order: -1;
+    font-size: 12px;
+    padding: 6px;
+  }
+  .civ-world-hud .civ-time-controls {
+    flex: 1;
+    font-size: 12px;
+    gap: 6px;
+  }
+  .civ-world-hud .civ-nav-link {
+    padding: 7px;
+    font-size: 12px;
+  }
+  .civ-world-hud .civ-speed {
+    gap: 4px;
+  }
+  .civ-world-inspector {
+    top: auto;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-height: 54dvh;
+  }
+  .civ-world-page.has-inspector .civ-locator,
+  .civ-world-page.has-inspector .civ-world-caption,
+  .civ-world-page.has-inspector .civ-map-tools,
+  .civ-world-page.has-inspector .civ-world-pending {
+    visibility: hidden;
+  }
+  .civ-world-caption {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    gap: 6px;
+    justify-content: space-between;
+    font-size: 11px;
+  }
+  .civ-map-tools {
+    left: 8px;
+    bottom: 65px;
+  }
+  .civ-map-tools span {
+    display: none;
+  }
+  .civ-locator {
+    right: 8px;
+    bottom: 65px;
+    font-size: 12px;
+  }
+  .civ-locator select {
+    max-width: 140px;
+  }
+  .civ-world-feedback {
+    top: 155px;
+    left: 8px;
+    max-width: calc(100% - 16px);
+  }
+  .civ-world-pending {
+    bottom: 113px;
+    left: 8px;
+    font-size: 12px;
+  }
+}
+.civ-app *,
+.civ-app *::before,
+.civ-app *::after {
+  box-sizing: border-box;
+}
+.civ-app ::selection {
+  background: var(--civ-gold);
+  color: var(--civ-ground);
+}
+.civ-app :focus-visible {
+  outline: 3px solid var(--civ-gold);
+  outline-offset: 3px;
+}
+.civ-app h1,
+.civ-app h2,
+.civ-app h3,
+.civ-app p {
+  margin: 0;
+}
+.civ-app h1 {
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: 0.015em;
+  color: var(--civ-gold);
+  line-height: 1.4;
+}
+html[lang='en'] .civ-app h1 {
+  font-family: 'Upheaval Pro', sans-serif;
+  font-size: 32px;
+  font-weight: 400;
+}
+.civ-app h2 {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.civ-app h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--civ-gold);
+  margin: 24px 0 8px;
+}
+.civ-app p {
+  margin: 8px 0 12px;
+  line-height: 1.8;
+  max-width: 75ch;
+  overflow-wrap: anywhere;
+}
+.civ-app small {
+  font-size: 12px;
+  color: var(--civ-muted);
+}
+.civ-app button,
+.civ-app select,
+.civ-app input,
+.civ-app textarea {
+  font: inherit;
+  border-radius: 0;
+}
+.civ-app button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #92726a;
+  background: #49363e;
+  color: var(--civ-text);
+  padding: 9px 14px;
+  min-height: 40px;
+  cursor: pointer;
+  white-space: normal;
+  line-height: 1.4;
+}
+.civ-app button:hover:not(:disabled) {
+  background: #62464a;
+  border-color: var(--civ-gold);
+}
+.civ-app button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.civ-app .civ-primary {
+  background: var(--civ-gold);
+  color: #30252c;
+  border-color: var(--civ-gold);
+  font-weight: 700;
+}
+.civ-app .civ-primary:hover:not(:disabled) {
+  background: #ffe1a6;
+  color: #30252c;
+}
+.civ-app label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #e3d4c3;
+  font-size: 13px;
+}
+.civ-app input,
+.civ-app select,
+.civ-app textarea {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--civ-line);
+  background: var(--civ-inset);
+  color: var(--civ-text);
+  min-height: 42px;
+  caret-color: var(--civ-gold);
+}
+.civ-app input::placeholder,
+.civ-app textarea::placeholder {
+  color: #b09b91;
+}
+.civ-app textarea {
+  min-height: 92px;
+  resize: vertical;
+}
+.civ-app a {
+  color: var(--civ-gold);
+  text-underline-offset: 4px;
+}
+.civ-app .civ-link {
+  color: var(--civ-gold);
+  background: transparent;
+  border: none;
+  padding: 2px 4px;
+  min-height: 30px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.civ-app details {
+  border-bottom: 1px solid var(--civ-line);
+  padding: 12px 0;
+}
+.civ-app summary {
+  cursor: pointer;
+  color: var(--civ-gold);
+}
+.civ-app pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  max-height: 180px;
+  overflow-y: auto;
+  margin: 12px 0;
+  background: var(--civ-inset);
+  padding: 10px;
+}
+.civ-app .civ-muted {
+  color: var(--civ-muted);
+  font-size: 12px;
+}
+.civ-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--civ-line);
+}
+.civ-app .civ-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--civ-text);
+  text-decoration: none;
+}
+.civ-brand > svg {
+  width: 42px;
+  height: 42px;
+  padding: 7px;
+  background: #6d4d43;
+  color: var(--civ-gold);
+}
+.civ-brand span {
+  color: var(--civ-muted);
+  font-size: 12px;
+}
+.civ-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.civ-language {
+  display: flex;
+  gap: 2px;
+}
+.civ-language button {
+  font-size: 12px;
+  min-height: 34px;
+  padding: 6px 10px;
+  border-color: var(--civ-line);
+}
+.civ-language button[aria-pressed='true'] {
+  background: var(--civ-gold);
+  color: #2e252c;
+}
+.civ-worldbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 0;
+}
+.civ-world-select {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.civ-world-select select {
+  width: clamp(200px, 26vw, 380px);
+  min-height: 38px;
+  padding-block: 6px;
+}
+.civ-world-select button {
+  min-height: 38px;
+  padding-block: 6px;
+}
+.civ-feedback {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 7px 14px;
+  background: #34463e;
+  color: #d1eddb;
+}
+.civ-feedback.error {
+  background: #643735;
+  color: #ffe3d4;
+  overflow-wrap: anywhere;
+}
+.civ-feedback button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  padding: 2px 8px;
+  min-height: 28px;
+}
+.civ-clockbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 0;
+}
+.civ-clockbar h2 {
+  display: inline;
+  margin-right: 18px;
+  font-size: 23px;
+}
+.civ-clockbar time {
+  color: var(--civ-gold);
+}
+.civ-time-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.civ-app .civ-speed {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.civ-speed select {
+  width: auto;
+}
+.civ-live {
+  color: var(--civ-muted);
+  font-size: 12px;
+}
+.civ-live::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #a29387;
+  margin-right: 7px;
+}
+.civ-live.running {
+  color: var(--civ-green);
+}
+.civ-live.running::before {
+  background: var(--civ-green);
+}
+.civ-statbar {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border-top: 1px solid var(--civ-line);
+  border-bottom: 1px solid var(--civ-line);
+  margin-bottom: 22px;
+  background: var(--civ-panel);
+}
+.civ-stat {
+  padding: 16px 20px;
+  border-right: 1px solid var(--civ-line);
+}
+.civ-stat:last-child {
+  border: none;
+}
+.civ-stat > span {
+  display: block;
+  font-size: 12px;
+  color: var(--civ-muted);
+}
+.civ-stat strong {
+  display: block;
+  font-size: 25px;
+  line-height: 1.6;
+  font-weight: 650;
+}
+.civ-stat small {
+  display: block;
+  color: var(--civ-green);
+}
+.civ-stat small span {
+  color: var(--civ-muted);
+  margin-left: 4px;
+}
+.civ-crisis {
+  border: 1px solid #a8755e;
+  background: #51362f;
+  color: #ffe0b5;
+  padding: 12px 18px;
+  margin-bottom: 18px;
+}
+.civ-decision {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  padding: 20px;
+  gap: 24px;
+  border: 1px solid #b58b54;
+  background: #42362d;
+  margin-bottom: 22px;
+}
+.civ-decision h3 {
+  margin-top: 0;
+}
+.civ-decision form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: flex-end;
+}
+.civ-observatory {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 310px;
+  align-items: start;
+  gap: 20px;
+}
+.civ-map-panel {
+  background: #252c25;
+  border: 4px solid #78574e;
+}
+.civ-map-heading {
+  min-height: 45px;
+  background: #413039;
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+}
+.civ-map-heading > span:first-child {
+  color: var(--civ-gold);
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.civ-map-heading > span:last-child {
+  text-align: right;
+}
+.civ-map-heading b {
+  color: var(--civ-gold);
+  font-weight: 500;
+}
+.civ-map-canvas {
+  width: 100%;
+  aspect-ratio: 1.5;
+  overflow: hidden;
+  background: #314833;
+}
+.civ-map-canvas canvas {
+  width: 100% !important;
+  height: auto !important;
+  image-rendering: pixelated;
+  display: block;
+}
+.civ-map-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  font-size: 11px;
+  background: #302a2c;
+}
+.civ-map-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.civ-map-legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+}
+.legend-forest {
+  background: #9ab36a;
+}
+.legend-water {
+  background: #689bac;
+}
+.legend-work {
+  border: 1px solid var(--civ-gold);
+}
+.legend-fog {
+  background: #1e2e27;
+  border: 1px solid #6c7b69;
+}
+.civ-inspector {
+  border: 1px solid var(--civ-line);
+  background: var(--civ-panel);
+  padding: 22px;
+  max-height: 700px;
+  overflow-y: auto;
+  scrollbar-color: #9a7764 #342832;
+  scrollbar-width: thin;
+}
+.civ-inspector h2 {
+  font-size: 18px;
+}
+.civ-inspector p {
+  font-size: 13px;
+}
+.civ-inspector h3:first-child {
+  margin-top: 0;
+}
+.civ-app .civ-close {
+  font-size: 12px;
+  padding: 5px 9px;
+  margin-bottom: 18px;
+  min-height: 32px;
+}
+.civ-direction {
+  border-top: 1px solid var(--civ-line);
+  border-bottom: 1px solid var(--civ-line);
+  padding: 12px 0;
+  margin: 18px 0;
+}
+.civ-direction h3 {
+  margin: 0;
+  color: var(--civ-gold);
+  font-size: 19px;
+}
+.civ-direction p {
+  margin-bottom: 0;
+}
+.civ-tech {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 13px 0;
+  font-size: 12px;
+}
+.civ-tech b {
+  color: var(--civ-green);
+  font-weight: 400;
+}
+.civ-app progress,
+.civ-app meter {
+  display: block;
+  width: 100%;
+  height: 6px;
+  appearance: none;
+  border: none;
+  background: #574246;
+  border-radius: 0;
+  accent-color: var(--civ-green);
+}
+.civ-app progress::-webkit-progress-bar {
+  background: #574246;
+}
+.civ-app progress::-webkit-progress-value {
+  background: var(--civ-green);
+}
+.civ-app meter::-webkit-meter-bar {
+  background: #574246;
+  border: none;
+  border-radius: 0;
+}
+.civ-app meter::-webkit-meter-optimum-value {
+  background: var(--civ-green);
+}
+.civ-vitals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.civ-vitals label {
+  display: block;
+}
+.civ-vitals span {
+  float: right;
+  color: var(--civ-muted);
+}
+.civ-vitals meter {
+  margin-top: 6px;
+}
+.civ-inspector dl > div {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #59434a;
+  font-size: 12px;
+}
+.civ-inspector dd {
+  text-align: right;
+}
+.civ-inspector dt {
+  flex-shrink: 0;
+  color: var(--civ-muted);
+}
+.civ-inspector dd .civ-link {
+  font-size: 12px;
+}
+.civ-mini-timeline {
+  padding-left: 15px;
+  font-size: 12px;
+}
+.civ-mini-timeline li {
+  padding: 6px 0;
+  list-style-type: square;
+}
+.civ-mini-timeline small {
+  display: block;
+}
+.civ-danger {
+  color: #ffb79a;
+}
+.civ-tabs {
+  display: flex;
+  gap: 5px;
+  border-bottom: 1px solid var(--civ-line);
+  margin: 26px 0 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #9a7764 #342832;
+}
+.civ-tabs button {
+  padding: 14px 20px;
+  background: none;
+  border: 1px solid transparent;
+  border-bottom: none;
+  white-space: nowrap;
+  color: var(--civ-muted);
+}
+.civ-tabs button[aria-current='page'] {
+  color: var(--civ-gold);
+  border-color: var(--civ-line);
+  background: var(--civ-panel);
+}
+.civ-lower {
+  min-height: 300px;
+  padding: 28px;
+  background: var(--civ-panel);
+  border: 1px solid var(--civ-line);
+  border-top: none;
+}
+.civ-history-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(250px, 1fr);
+  gap: 48px;
+}
+.civ-timeline {
+  padding: 0;
+  margin: 20px 0;
+  list-style: none;
+}
+.civ-timeline li {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 20px;
+  border-top: 1px solid var(--civ-line);
+  padding: 15px 0;
+}
+.civ-timeline time {
+  font-size: 12px;
+  color: var(--civ-muted);
+  padding-top: 3px;
+}
+.civ-timeline p {
+  margin: 4px 0;
+  font-size: 13px;
+}
+.civ-event-kind {
+  color: var(--civ-gold);
+  font-size: 11px;
+}
+.civ-status {
+  display: inline-block;
+  padding: 2px 7px;
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--civ-gold);
+  background: #5a4544;
+  vertical-align: middle;
+}
+.civ-status.completed {
+  color: #bbe9cb;
+  background: #3b5447;
+}
+.civ-status.failed {
+  color: #ffcfb9;
+  background: #684337;
+}
+.civ-status.executing {
+  color: #f5deb8;
+  background: #69523a;
+}
+.civ-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.civ-app .civ-checkbox {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.civ-checkbox input {
+  width: 16px;
+  min-height: 16px;
+  height: 16px;
+  margin: 0;
+}
+.civ-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-color: #9a7764 #342832;
+}
+.civ-app table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.civ-app th,
+.civ-app td {
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--civ-line);
+}
+.civ-app th {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--civ-muted);
+}
+.civ-app tbody tr:hover {
+  background: #3e3038;
+}
+.civ-plans {
+  display: flex;
+  flex-direction: column;
+}
+.civ-plan-row,
+.civ-decision-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--civ-line);
+}
+.civ-plan-row h3,
+.civ-decision-row h3 {
+  margin-top: 0;
+}
+.civ-plan-row progress {
+  margin: 14px 0 8px;
+}
+.civ-plan-row p,
+.civ-decision-row p {
+  font-size: 13px;
+}
+.civ-plan-row span {
+  font-size: 12px;
+}
+.civ-settings {
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.civ-form-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.civ-settings h2,
+.civ-settings p {
+  margin: 0;
+}
+.civ-settings fieldset {
+  border: 1px solid var(--civ-line);
+  padding: 15px;
+}
+.civ-settings fieldset .civ-checkbox {
+  margin-right: 18px;
+}
+.civ-weights {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
+}
+.civ-weights label {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.civ-weights input {
+  width: 70px;
+}
+.civ-weight-list {
+  padding: 0;
+  list-style: none;
+}
+.civ-weight-list li {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--civ-line);
+  padding: 7px 0;
+}
+.civ-create {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 8vw;
+  border: 4px solid #78574e;
+  background: var(--civ-panel);
+  padding: 48px;
+  margin: 24px auto 48px;
+  max-width: 1200px;
+}
+.civ-create-intro h2 {
+  font-size: 34px;
+  color: var(--civ-gold);
+  line-height: 1.7;
+  max-width: 14ch;
+}
+.civ-create-intro > p {
+  font-size: 15px;
+}
+.civ-seed-note {
+  margin-top: 48px;
+  border-top: 1px solid var(--civ-line);
+  padding-top: 25px;
+}
+.civ-seed-note p {
+  color: var(--civ-muted);
+  font-size: 13px;
+}
+.civ-create-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.civ-create-fields > button {
+  width: 100%;
+}
+.civ-save-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+  margin: 22px 0;
+}
+.civ-save-form label {
+  flex: 1 0 100%;
+}
+.civ-saves {
+  list-style: none;
+  padding: 0;
+}
+.civ-saves li {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--civ-line);
+}
+.civ-saves small {
+  display: block;
+}
+.civ-intervention {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.civ-intervention p {
+  margin: 0;
+}
+.civ-inline-actions {
+  display: flex;
+  gap: 12px;
+}
+.civ-compare-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  margin: 24px 0;
+}
+.civ-compare-options > label:last-child {
+  margin-left: auto;
+}
+.civ-chart {
+  max-width: 1000px;
+  padding: 14px 0;
+  background: var(--civ-inset);
+}
+.civ-chart svg {
+  width: 100%;
+  display: block;
+}
+.civ-chart-legend {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+.civ-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 25px 0;
+  font-size: 11px;
+  color: var(--civ-muted);
+}
+.civ-loading {
+  padding: 60px 0;
+}
+@media (min-width: 1800px) {
+  .civ-app {
+    padding-inline: max(28px, calc((100vw - 1720px) / 2));
+  }
+  .civ-observatory {
+    grid-template-columns: minmax(0, 1fr) 360px;
+  }
+}
+@media (max-width: 1100px) {
+  .civ-clockbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .civ-inspector {
+    padding: 16px;
+    max-height: 580px;
+  }
+  .civ-observatory {
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 14px;
+  }
+  .civ-stat {
+    padding-inline: 14px;
+  }
+  .civ-stat strong {
+    font-size: 22px;
+  }
+  .civ-history-layout {
+    gap: 25px;
+  }
+  .civ-timeline li {
+    grid-template-columns: 120px 1fr;
+    gap: 12px;
+  }
+}
+@media (max-width: 800px) {
+  .civ-app {
+    padding-inline: 16px;
+  }
+  .civ-header {
+    flex-wrap: wrap;
+    padding: 16px 0;
+    gap: 14px;
+  }
+  .civ-top-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .civ-app h1 {
+    font-size: 19px;
+  }
+  .civ-worldbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .civ-world-select {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .civ-world-select label {
+    width: 100%;
+  }
+  .civ-world-select select {
+    width: 65%;
+    flex-grow: 1;
+  }
+  .civ-statbar {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .civ-stat {
+    padding: 12px;
+    border-bottom: 1px solid var(--civ-line);
+  }
+  .civ-stat:nth-child(3) {
+    border-right: none;
+  }
+  .civ-stat strong {
+    font-size: 21px;
+  }
+  .civ-stat small span {
+    display: block;
+    margin: 0;
+  }
+  .civ-observatory {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .civ-inspector {
+    max-height: 440px;
+    padding: 20px;
+  }
+  .civ-map-heading {
+    align-items: flex-start;
+  }
+  .civ-map-legend {
+    gap: 10px;
+  }
+  .civ-map-legend > span:last-child {
+    width: 100%;
+  }
+  .civ-tabs {
+    margin-top: 18px;
+  }
+  .civ-tabs button {
+    padding: 12px 15px;
+  }
+  .civ-lower {
+    padding: 20px 16px;
+  }
+  .civ-history-layout,
+  .civ-plan-row,
+  .civ-decision-row,
+  .civ-decision {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .civ-timeline li {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+  .civ-create {
+    grid-template-columns: 1fr;
+    padding: 24px;
+    gap: 30px;
+  }
+  .civ-create-intro h2 {
+    font-size: 27px;
+    max-width: none;
+  }
+  .civ-seed-note {
+    margin-top: 22px;
+    padding-top: 18px;
+  }
+  .civ-footer,
+  .civ-section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .civ-time-controls {
+    gap: 8px;
+  }
+  .civ-time-controls > .civ-live {
+    width: 100%;
+  }
+  .civ-clockbar h2 {
+    display: block;
+  }
+  .civ-decision form {
+    grid-template-columns: 1fr;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .civ-app * {
+    scroll-behavior: auto !important;
+  }
+}
+.civ-storage {
+  min-width: 0;
+}
+.civ-storage-facts {
+  display: grid;
+  grid-template-columns: minmax(9rem, 1fr) 2fr;
+  gap: 0.6rem 1.5rem;
+  margin: 1rem 0 1.5rem;
+}
+.civ-storage-facts dd {
+  font-variant-numeric: tabular-nums;
+}
+.civ-storage h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
+}
+.civ-storage .civ-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+.civ-storage table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+  text-align: left;
+}
+.civ-storage th,
+.civ-storage td {
+  padding: 0.7rem;
+  border-bottom: 1px solid var(--civ-line, #68504f);
+  vertical-align: top;
+}
+.civ-storage caption {
+  text-align: left;
+  padding-bottom: 0.6rem;
+  font-weight: 600;
+}
+.civ-storage code {
+  overflow-wrap: anywhere;
+}
+.civ-storage .civ-inline-actions {
+  flex-wrap: wrap;
+  align-items: end;
+}
+.civ-storage .civ-inline-actions label {
+  flex: 1 1 10rem;
+  min-width: 0;
+}
+.civ-storage input,
+.civ-storage select {
+  width: 100%;
+}
+@media (max-width: 600px) {
+  .civ-storage-facts {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .civ-storage th,
+  .civ-storage td {
+    padding: 0.5rem;
+  }
+}

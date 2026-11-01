@@ -9,8 +9,11 @@ import { Id } from '../../../convex/_generated/dataModel';
 import { useCallback } from 'react';
 import { waitForInput } from '../../hooks/sendInput';
 import { useServerGame } from '../../hooks/serverGame';
+import { useLocale } from '../../i18n/LocaleProvider';
+import { translateError } from '../../i18n/catalog';
 
 export default function InteractButton() {
+  const { t } = useLocale();
   // const { isAuthenticated } = useConvexAuth();
   const worldStatus = useQuery(api.world.defaultWorldStatus);
   const worldId = worldStatus?.worldId;
@@ -30,7 +33,7 @@ export default function InteractButton() {
         inputId = await join({ worldId });
       } catch (e: any) {
         if (e instanceof ConvexError) {
-          toast.error(e.data);
+          toast.error(translateError(String(e.data)));
           return;
         }
         throw e;
@@ -38,7 +41,7 @@ export default function InteractButton() {
       try {
         await waitForInput(convex, inputId);
       } catch (e: any) {
-        toast.error(e.message);
+        toast.error(translateError(String(e.message)));
       }
     },
     [convex],
@@ -69,7 +72,7 @@ export default function InteractButton() {
   // }
   return (
     <Button imgUrl={interactImg} onClick={joinOrLeaveGame}>
-      {isPlaying ? 'Leave' : 'Interact'}
+      {t(isPlaying ? 'leave' : 'interact')}
     </Button>
   );
 }

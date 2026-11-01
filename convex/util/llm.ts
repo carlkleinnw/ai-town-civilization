@@ -2,35 +2,17 @@
 
 const OPENAI_EMBEDDING_DIMENSION = 1536;
 const TOGETHER_EMBEDDING_DIMENSION = 768;
-const OLLAMA_EMBEDDING_DIMENSION = 1024;
+// The Windows local profile uses embeddinggemma:300m (768 dimensions).
+const OLLAMA_EMBEDDING_DIMENSION = 768;
 
 export const EMBEDDING_DIMENSION: number = OLLAMA_EMBEDDING_DIMENSION;
 
 export function detectMismatchedLLMProvider() {
-  switch (EMBEDDING_DIMENSION) {
-    case OPENAI_EMBEDDING_DIMENSION:
-      if (!process.env.OPENAI_API_KEY) {
-        throw new Error(
-          "Are you trying to use OpenAI? If so, run: npx convex env set OPENAI_API_KEY 'your-key'",
-        );
-      }
-      break;
-    case TOGETHER_EMBEDDING_DIMENSION:
-      if (!process.env.TOGETHER_API_KEY) {
-        throw new Error(
-          "Are you trying to use Together.ai? If so, run: npx convex env set TOGETHER_API_KEY 'your-key'",
-        );
-      }
-      break;
-    case OLLAMA_EMBEDDING_DIMENSION:
-      break;
-    default:
-      if (!process.env.LLM_API_URL) {
-        throw new Error(
-          "Are you trying to use a custom cloud-hosted LLM? If so, run: npx convex env set LLM_API_URL 'your-url'",
-        );
-      }
-      break;
+  // Different providers can use the same vector dimension. Select by provider,
+  // rather than inferring the provider from the dimension.
+  const config = getLLMConfig();
+  if ((config.provider === 'openai' || config.provider === 'together') && !config.apiKey) {
+    throw new Error(`Missing API key for ${config.provider}`);
   }
 }
 
@@ -90,7 +72,6 @@ export function getLLMConfig(): LLMConfig {
   }
   // Assume Ollama
   if (EMBEDDING_DIMENSION !== OLLAMA_EMBEDDING_DIMENSION) {
-    detectMismatchedLLMProvider();
     throw new Error(
       `Unknown EMBEDDING_DIMENSION ${EMBEDDING_DIMENSION} found` +
         `. See convex/util/llm.ts for details.`,
@@ -103,7 +84,7 @@ export function getLLMConfig(): LLMConfig {
     provider: 'ollama',
     url: process.env.OLLAMA_HOST ?? 'http://127.0.0.1:11434',
     chatModel: process.env.OLLAMA_MODEL ?? 'llama3',
-    embeddingModel: process.env.OLLAMA_EMBEDDING_MODEL ?? 'mxbai-embed-large',
+    embeddingModel: process.env.OLLAMA_EMBEDDING_MODEL ?? 'embeddinggemma:300m',
     stopWords: ['<|eot_id|>'],
     apiKey: undefined,
   };
@@ -154,7 +135,12 @@ export async function chatCompletion(
         ...AuthHeaders(),
       },
 
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        ...body,
+        ...(config.provider === 'ollama' && process.env.OLLAMA_REASONING_EFFORT
+          ? { reasoning_effort: process.env.OLLAMA_REASONING_EFFORT }
+          : {}),
+      }),
     });
     if (!result.ok) {
       const error = await result.text();

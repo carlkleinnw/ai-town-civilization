@@ -7,6 +7,7 @@ import { api, internal } from '../_generated/api';
 import * as embeddingsCache from './embeddingsCache';
 import { GameId, conversationId, playerId } from '../aiTown/ids';
 import { NUM_MEMORIES_TO_SEARCH } from '../constants';
+import { conversationLanguagePrompt } from './language';
 
 const selfInternal = internal.agent.conversation;
 
@@ -17,7 +18,7 @@ export async function startConversationMessage(
   playerId: GameId<'players'>,
   otherPlayerId: GameId<'players'>,
 ): Promise<string> {
-  const { player, otherPlayer, agent, otherAgent, lastConversation } = await ctx.runQuery(
+  const { player, otherPlayer, agent, otherAgent, lastConversation, language } = await ctx.runQuery(
     selfInternal.queryPromptData,
     {
       worldId,
@@ -53,6 +54,7 @@ export async function startConversationMessage(
     );
   }
   const lastPrompt = `${player.name} to ${otherPlayer.name}:`;
+  prompt.push(conversationLanguagePrompt(language));
   const messages: LLMMessage[] = [
     {
       role: 'system',
@@ -84,7 +86,7 @@ export async function continueConversationMessage(
   playerId: GameId<'players'>,
   otherPlayerId: GameId<'players'>,
 ): Promise<string> {
-  const { player, otherPlayer, conversation, agent, otherAgent } = await ctx.runQuery(
+  const { player, otherPlayer, conversation, agent, otherAgent, language } = await ctx.runQuery(
     selfInternal.queryPromptData,
     {
       worldId,
@@ -111,6 +113,7 @@ export async function continueConversationMessage(
     `DO NOT greet them again. Do NOT use the word "Hey" too often. Your response should be brief and within 200 characters.`,
   );
 
+  prompt.push(conversationLanguagePrompt(language));
   const llmMessages: LLMMessage[] = [
     {
       role: 'system',
@@ -143,7 +146,7 @@ export async function leaveConversationMessage(
   playerId: GameId<'players'>,
   otherPlayerId: GameId<'players'>,
 ): Promise<string> {
-  const { player, otherPlayer, conversation, agent, otherAgent } = await ctx.runQuery(
+  const { player, otherPlayer, conversation, agent, otherAgent, language } = await ctx.runQuery(
     selfInternal.queryPromptData,
     {
       worldId,
@@ -161,6 +164,7 @@ export async function leaveConversationMessage(
     `Below is the current chat history between you and ${otherPlayer.name}.`,
     `How would you like to tell them that you're leaving? Your response should be brief and within 200 characters.`,
   );
+  prompt.push(conversationLanguagePrompt(language));
   const llmMessages: LLMMessage[] = [
     {
       role: 'system',
@@ -276,6 +280,10 @@ export const queryPromptData = internalQuery({
     if (!world) {
       throw new Error(`World ${args.worldId} not found`);
     }
+    const worldStatus = await ctx.db
+      .query('worldStatus')
+      .withIndex('worldId', (q) => q.eq('worldId', args.worldId))
+      .unique();
     const player = world.players.find((p) => p.id === args.playerId);
     if (!player) {
       throw new Error(`Player ${args.playerId} not found`);
@@ -349,6 +357,7 @@ export const queryPromptData = internalQuery({
       }
     }
     return {
+      language: worldStatus?.language ?? ('zh' as const),
       player: { name: playerDescription.name, ...player },
       otherPlayer: { name: otherPlayerDescription.name, ...otherPlayer },
       conversation,
